@@ -4,21 +4,25 @@ A Flutter mobile app that detects phishing and malicious URLs in real-time.
 
   Screenshots
 
-![Home](screenshots/Home.png)
+<p align="center">
+  <img src="screenshots/Home.png" width="250"/>
+</p>
 
-![Medium Risk 1](screenshots/Medium%20Risk%201.png)
+<p align="center">
+  <img src="screenshots/Medium Risk 1.png" width="250"/>
+  <img src="screenshots/Medium Risk 2.png" width="250"/>
+  <img src="screenshots/Medium Risk 3.png" width="250"/>
+</p>
 
-![Medium Risk 2](screenshots/Medium%20Risk%202.png)
+<p align="center">
+  <img src="screenshots/Safe Risk 1.png" width="250"/>
+  <img src="screenshots/Safe Risk 2.png" width="250"/>
+  <img src="screenshots/Safe Risk 3.png" width="250"/>
+</p>
 
-![Medium Risk 3](screenshots/Medium%20Risk%203.png)
-
-![Safe Risk 1](screenshots/Safe%20Risk%201.png)
-
-![Safe Risk 2](screenshots/Safe%20Risk%202.png)
-
-![Safe Risk 3](screenshots/Safe%20Risk%203.png)
-
-![Scan History](screenshots/Scan%20History%20Section.png)
+<p align="center">
+  <img src="screenshots/Scan History Section.png" width="250"/>
+</p>
 
   Features
 
