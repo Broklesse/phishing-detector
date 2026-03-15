@@ -8,8 +8,8 @@ void main() {
 
 // ─── API KEYS (move to .env before sharing on GitHub) ────────────────────────
 const String kVirusTotalKey =
-    'c02720a1d144582bfe13e8c6634dbc986fdb1b7287785dfe1186082bc4b03c29';
-const String kGoogleSafeBrowsingKey = 'AIzaSyBMrYcEtt7h2bfK7CMU-vedgkoTfSteJ0s';
+    'YOUR_VIRUSTOTAL_API_KEY';
+const String kGoogleSafeBrowsingKey = 'YOUR_GOOGLE_SB_API_KEY';
 
 class MyApp extends StatelessWidget {
   const MyApp({super.key});
