@@ -2,7 +2,7 @@
 
 A Flutter mobile app that detects phishing and malicious URLs in real-time.
 
-  Screenshots
+  Screenshots :
 
 <p align="center">
   <img src="screenshots/Home.png" width="250"/>
@@ -20,11 +20,8 @@ A Flutter mobile app that detects phishing and malicious URLs in real-time.
   <img src="screenshots/Safe Risk 3.png" width="250"/>
 </p>
 
-<p align="center">
-  <img src="screenshots/Scan History Section.png" width="250"/>
-</p>
 
-  Features
+  Features :
 
 - Real-time URL scanning via VirusTotal (94+ engines)
 - Google Safe Browsing API integration
@@ -34,19 +31,19 @@ A Flutter mobile app that detects phishing and malicious URLs in real-time.
 - Suspicious keyword analysis
 - Scan history
 
-  Setup
+  Setup :
 
 1. Clone the repo
 2. Run flutter pub get
 3. Add your API keys in lib/main.dart
 4. Run flutter run
 
-  API Keys needed
+  API Keys needed :
 
 - VirusTotal: https://www.virustotal.com/gui/my-apikey
 - Google Safe Browsing: https://console.cloud.google.com
 
-  Built with
+  Built with :
 
 - Flutter 3.41
 - VirusTotal API v3
