@@ -1,5 +1,6 @@
 import 'dart:convert';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:http/http.dart' as http;
 
 void main() {
@@ -7,8 +8,7 @@ void main() {
 }
 
 // ─── API KEYS (move to .env before sharing on GitHub) ────────────────────────
-const String kVirusTotalKey =
-    'YOUR_VIRUSTOTAL_API_KEY';
+const String kVirusTotalKey = 'YOUR_VIRUSTOTAL_API_KEY';
 const String kGoogleSafeBrowsingKey = 'YOUR_GOOGLE_SB_API_KEY';
 
 class MyApp extends StatelessWidget {
@@ -122,14 +122,14 @@ class PhishingApiService {
 
       if (response.statusCode == 200) {
         final data = json.decode(response.body);
-        final stats =
-            data['data']?['attributes']?['last_analysis_stats'] ?? {};
+        final stats = data['data']?['attributes']?['last_analysis_stats'] ?? {};
         return {
           'malicious': stats['malicious'] ?? 0,
           'suspicious': stats['suspicious'] ?? 0,
           'harmless': stats['harmless'] ?? 0,
           'undetected': stats['undetected'] ?? 0,
-          'total': (stats['malicious'] ?? 0) +
+          'total':
+              (stats['malicious'] ?? 0) +
               (stats['suspicious'] ?? 0) +
               (stats['harmless'] ?? 0) +
               (stats['undetected'] ?? 0),
@@ -163,7 +163,7 @@ class PhishingApiService {
             'platformTypes': ['ANY_PLATFORM'],
             'threatEntryTypes': ['URL'],
             'threatEntries': [
-              {'url': url}
+              {'url': url},
             ],
           },
         }),
@@ -213,9 +213,22 @@ class PhishingApiService {
 
     // suspicious keywords in full URL
     final suspiciousKeywords = [
-      'login', 'secure', 'verify', 'account', 'update',
-      'banking', 'signin', 'password', 'credential', 'confirm',
-      'suspend', 'unusual', 'alert', 'free', 'prize', 'winner',
+      'login',
+      'secure',
+      'verify',
+      'account',
+      'update',
+      'banking',
+      'signin',
+      'password',
+      'credential',
+      'confirm',
+      'suspend',
+      'unusual',
+      'alert',
+      'free',
+      'prize',
+      'winner',
     ];
     final foundKeywords = suspiciousKeywords
         .where((k) => url.toLowerCase().contains(k))
@@ -234,8 +247,7 @@ class PhishingApiService {
 
     // suspicious TLDs
     final suspiciousTlds = ['.xyz', '.tk', '.ml', '.ga', '.cf', '.gq', '.pw'];
-    final hasSuspiciousTld =
-        suspiciousTlds.any((tld) => host.endsWith(tld));
+    final hasSuspiciousTld = suspiciousTlds.any((tld) => host.endsWith(tld));
 
     // excessive subdomains (more than 3 dots)
     final subdomainCount = host.split('.').length - 2;
@@ -411,8 +423,8 @@ class _HomeScreenState extends State<HomeScreen>
           title: 'VirusTotal Scan',
           description: vtResult['success'] == true
               ? vtMalicious > 0
-                  ? '$vtMalicious/$vtTotal engines flagged this URL as malicious'
-                  : 'Clean — 0/$vtTotal engines flagged this URL'
+                    ? '$vtMalicious/$vtTotal engines flagged this URL as malicious'
+                    : 'Clean — 0/$vtTotal engines flagged this URL'
               : 'Could not reach VirusTotal (check internet)',
           isDangerous: vtMalicious > 0,
           icon: vtMalicious > 0 ? Icons.bug_report : Icons.verified_user,
@@ -498,11 +510,11 @@ class _HomeScreenState extends State<HomeScreen>
     ScaffoldMessenger.of(context).showSnackBar(
       SnackBar(
         content: Text(message),
-        backgroundColor:
-            isError ? const Color(0xFFFF3B3B) : const Color(0xFF00FF88),
+        backgroundColor: isError
+            ? const Color(0xFFFF3B3B)
+            : const Color(0xFF00FF88),
         behavior: SnackBarBehavior.floating,
-        shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(12)),
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
       ),
     );
   }
@@ -512,14 +524,12 @@ class _HomeScreenState extends State<HomeScreen>
       context: context,
       builder: (context) => AlertDialog(
         backgroundColor: const Color(0xFF111827),
-        shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(16)),
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
         title: const Row(
           children: [
             Icon(Icons.flag, color: Color(0xFFFF3B3B)),
             SizedBox(width: 8),
-            Text('Report Phishing',
-                style: TextStyle(color: Colors.white)),
+            Text('Report Phishing', style: TextStyle(color: Colors.white)),
           ],
         ),
         content: const Text(
@@ -529,8 +539,10 @@ class _HomeScreenState extends State<HomeScreen>
         actions: [
           TextButton(
             onPressed: () => Navigator.pop(context),
-            child: const Text('Cancel',
-                style: TextStyle(color: Colors.white54)),
+            child: const Text(
+              'Cancel',
+              style: TextStyle(color: Colors.white54),
+            ),
           ),
           ElevatedButton(
             onPressed: () {
@@ -541,7 +553,8 @@ class _HomeScreenState extends State<HomeScreen>
               backgroundColor: const Color(0xFFFF3B3B),
               foregroundColor: Colors.white,
               shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(8)),
+                borderRadius: BorderRadius.circular(8),
+              ),
             ),
             child: const Text('Report'),
           ),
@@ -555,14 +568,12 @@ class _HomeScreenState extends State<HomeScreen>
       context: context,
       builder: (context) => AlertDialog(
         backgroundColor: const Color(0xFF111827),
-        shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(16)),
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
         title: const Row(
           children: [
             Icon(Icons.qr_code_scanner, color: Color(0xFF00FF88)),
             SizedBox(width: 8),
-            Text('QR Code Scanner',
-                style: TextStyle(color: Colors.white)),
+            Text('QR Code Scanner', style: TextStyle(color: Colors.white)),
           ],
         ),
         content: Column(
@@ -574,20 +585,21 @@ class _HomeScreenState extends State<HomeScreen>
               decoration: BoxDecoration(
                 color: const Color(0xFF0A0E1A),
                 borderRadius: BorderRadius.circular(12),
-                border: Border.all(
-                    color: const Color(0xFF00FF88), width: 2),
+                border: Border.all(color: const Color(0xFF00FF88), width: 2),
               ),
               child: const Column(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  Icon(Icons.qr_code_scanner,
-                      color: Color(0xFF00FF88), size: 64),
+                  Icon(
+                    Icons.qr_code_scanner,
+                    color: Color(0xFF00FF88),
+                    size: 64,
+                  ),
                   SizedBox(height: 12),
                   Text(
                     'Camera access needed\n(coming soon)',
                     textAlign: TextAlign.center,
-                    style:
-                        TextStyle(color: Colors.white54, fontSize: 13),
+                    style: TextStyle(color: Colors.white54, fontSize: 13),
                   ),
                 ],
               ),
@@ -603,8 +615,7 @@ class _HomeScreenState extends State<HomeScreen>
         actions: [
           TextButton(
             onPressed: () => Navigator.pop(context),
-            child: const Text('Close',
-                style: TextStyle(color: Colors.white54)),
+            child: const Text('Close', style: TextStyle(color: Colors.white54)),
           ),
         ],
       ),
@@ -663,8 +674,11 @@ class _HomeScreenState extends State<HomeScreen>
               color: const Color(0xFF00FF88).withOpacity(0.15),
               borderRadius: BorderRadius.circular(8),
             ),
-            child: const Icon(Icons.security,
-                color: Color(0xFF00FF88), size: 20),
+            child: const Icon(
+              Icons.security,
+              color: Color(0xFF00FF88),
+              size: 20,
+            ),
           ),
           const SizedBox(width: 10),
           const Text(
@@ -680,8 +694,7 @@ class _HomeScreenState extends State<HomeScreen>
       ),
       actions: [
         IconButton(
-          icon:
-              const Icon(Icons.settings_outlined, color: Colors.white54),
+          icon: const Icon(Icons.settings_outlined, color: Colors.white54),
           onPressed: () {},
         ),
       ],
@@ -704,8 +717,7 @@ class _HomeScreenState extends State<HomeScreen>
         const SizedBox(height: 6),
         Text(
           'Powered by VirusTotal, Google Safe Browsing & PhishTank',
-          style: TextStyle(
-              color: Colors.white.withOpacity(0.5), fontSize: 13),
+          style: TextStyle(color: Colors.white.withOpacity(0.5), fontSize: 13),
         ),
       ],
     );
@@ -726,16 +738,18 @@ class _HomeScreenState extends State<HomeScreen>
             style: const TextStyle(color: Colors.white, fontSize: 15),
             decoration: InputDecoration(
               hintText: 'Paste URL here... (e.g. https://example.com)',
-              hintStyle:
-                  TextStyle(color: Colors.white.withOpacity(0.3)),
-              prefixIcon: Icon(Icons.link,
-                  color: Colors.white.withOpacity(0.4)),
+              hintStyle: TextStyle(color: Colors.white.withOpacity(0.3)),
+              prefixIcon: Icon(
+                Icons.link,
+                color: Colors.white.withOpacity(0.4),
+              ),
               suffixIcon: _urlController.text.isNotEmpty
                   ? IconButton(
-                      icon: Icon(Icons.clear,
-                          color: Colors.white.withOpacity(0.4)),
-                      onPressed: () =>
-                          setState(() => _urlController.clear()),
+                      icon: Icon(
+                        Icons.clear,
+                        color: Colors.white.withOpacity(0.4),
+                      ),
+                      onPressed: () => setState(() => _urlController.clear()),
                     )
                   : null,
               filled: true,
@@ -745,7 +759,9 @@ class _HomeScreenState extends State<HomeScreen>
                 borderSide: BorderSide.none,
               ),
               contentPadding: const EdgeInsets.symmetric(
-                  horizontal: 16, vertical: 14),
+                horizontal: 16,
+                vertical: 14,
+              ),
             ),
             onChanged: (_) => setState(() {}),
             onSubmitted: (_) => _scanUrl(),
@@ -759,10 +775,12 @@ class _HomeScreenState extends State<HomeScreen>
               style: ElevatedButton.styleFrom(
                 backgroundColor: const Color(0xFF00FF88),
                 foregroundColor: Colors.black,
-                disabledBackgroundColor:
-                    const Color(0xFF00FF88).withOpacity(0.4),
+                disabledBackgroundColor: const Color(
+                  0xFF00FF88,
+                ).withOpacity(0.4),
                 shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(12)),
+                  borderRadius: BorderRadius.circular(12),
+                ),
                 elevation: 0,
               ),
               child: _isScanning
@@ -770,17 +788,22 @@ class _HomeScreenState extends State<HomeScreen>
                       width: 20,
                       height: 20,
                       child: CircularProgressIndicator(
-                          color: Colors.black, strokeWidth: 2),
+                        color: Colors.black,
+                        strokeWidth: 2,
+                      ),
                     )
                   : const Row(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
                         Icon(Icons.radar, size: 20),
                         SizedBox(width: 8),
-                        Text('Scan URL',
-                            style: TextStyle(
-                                fontSize: 16,
-                                fontWeight: FontWeight.bold)),
+                        Text(
+                          'Scan URL',
+                          style: TextStyle(
+                            fontSize: 16,
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ),
                       ],
                     ),
             ),
@@ -807,8 +830,15 @@ class _HomeScreenState extends State<HomeScreen>
             icon: Icons.content_paste,
             label: 'Paste URL',
             color: const Color(0xFF8B5CF6),
-            onTap: () => _showSnackBar(
-                'Paste your URL manually in the text field above'),
+            onTap: () async {
+              final data = await Clipboard.getData(Clipboard.kTextPlain);
+              if (data?.text != null && data!.text!.isNotEmpty) {
+                setState(() => _urlController.text = data.text!);
+                _showSnackBar('URL pasted successfully!');
+              } else {
+                _showSnackBar('Nothing found in clipboard', isError: true);
+              }
+            },
           ),
         ),
       ],
@@ -831,11 +861,15 @@ class _HomeScreenState extends State<HomeScreen>
                   shape: BoxShape.circle,
                   color: const Color(0xFF00FF88).withOpacity(0.15),
                   border: Border.all(
-                      color: const Color(0xFF00FF88).withOpacity(0.5),
-                      width: 2),
+                    color: const Color(0xFF00FF88).withOpacity(0.5),
+                    width: 2,
+                  ),
                 ),
-                child: const Icon(Icons.radar,
-                    color: Color(0xFF00FF88), size: 36),
+                child: const Icon(
+                  Icons.radar,
+                  color: Color(0xFF00FF88),
+                  size: 36,
+                ),
               ),
             ),
           ),
@@ -848,7 +882,9 @@ class _HomeScreenState extends State<HomeScreen>
           Text(
             'Using real threat intelligence APIs',
             style: TextStyle(
-                color: Colors.white.withOpacity(0.4), fontSize: 12),
+              color: Colors.white.withOpacity(0.4),
+              fontSize: 12,
+            ),
           ),
           const SizedBox(height: 28),
         ],
@@ -890,21 +926,28 @@ class _HomeScreenState extends State<HomeScreen>
         color: const Color(0xFF111827),
         borderRadius: BorderRadius.circular(16),
         border: Border.all(
-            color: result.riskColor.withOpacity(0.4), width: 1.5),
+          color: result.riskColor.withOpacity(0.4),
+          width: 1.5,
+        ),
       ),
       child: Column(
         children: [
           Row(
             children: [
-              const Text('Security Score',
-                  style: TextStyle(
-                      color: Colors.white70,
-                      fontSize: 14,
-                      fontWeight: FontWeight.w600)),
+              const Text(
+                'Security Score',
+                style: TextStyle(
+                  color: Colors.white70,
+                  fontSize: 14,
+                  fontWeight: FontWeight.w600,
+                ),
+              ),
               const Spacer(),
               Container(
                 padding: const EdgeInsets.symmetric(
-                    horizontal: 12, vertical: 5),
+                  horizontal: 12,
+                  vertical: 5,
+                ),
                 decoration: BoxDecoration(
                   color: result.riskColor.withOpacity(0.15),
                   borderRadius: BorderRadius.circular(20),
@@ -932,8 +975,7 @@ class _HomeScreenState extends State<HomeScreen>
                   value: result.riskScore / 100,
                   strokeWidth: 12,
                   backgroundColor: Colors.white.withOpacity(0.1),
-                  valueColor: AlwaysStoppedAnimation<Color>(
-                      result.riskColor),
+                  valueColor: AlwaysStoppedAnimation<Color>(result.riskColor),
                 ),
               ),
               Column(
@@ -946,10 +988,13 @@ class _HomeScreenState extends State<HomeScreen>
                       fontWeight: FontWeight.bold,
                     ),
                   ),
-                  Text('Risk Score',
-                      style: TextStyle(
-                          color: Colors.white.withOpacity(0.5),
-                          fontSize: 13)),
+                  Text(
+                    'Risk Score',
+                    style: TextStyle(
+                      color: Colors.white.withOpacity(0.5),
+                      fontSize: 13,
+                    ),
+                  ),
                 ],
               ),
             ],
@@ -967,20 +1012,22 @@ class _HomeScreenState extends State<HomeScreen>
                 mainAxisAlignment: MainAxisAlignment.spaceAround,
                 children: [
                   _VtStat(
-                      label: 'Malicious',
-                      value: '${result.vtMalicious}',
-                      color: result.vtMalicious > 0
-                          ? const Color(0xFFFF3B3B)
-                          : Colors.white70),
+                    label: 'Malicious',
+                    value: '${result.vtMalicious}',
+                    color: result.vtMalicious > 0
+                        ? const Color(0xFFFF3B3B)
+                        : Colors.white70,
+                  ),
                   _VtStat(
-                      label: 'Clean',
-                      value:
-                          '${result.vtTotal - result.vtMalicious}',
-                      color: const Color(0xFF00FF88)),
+                    label: 'Clean',
+                    value: '${result.vtTotal - result.vtMalicious}',
+                    color: const Color(0xFF00FF88),
+                  ),
                   _VtStat(
-                      label: 'Total Engines',
-                      value: '${result.vtTotal}',
-                      color: Colors.white70),
+                    label: 'Total Engines',
+                    value: '${result.vtTotal}',
+                    color: Colors.white70,
+                  ),
                 ],
               ),
             ),
@@ -993,14 +1040,16 @@ class _HomeScreenState extends State<HomeScreen>
             ),
             child: Row(
               children: [
-                Icon(Icons.link,
-                    color: Colors.white.withOpacity(0.4), size: 16),
+                Icon(
+                  Icons.link,
+                  color: Colors.white.withOpacity(0.4),
+                  size: 16,
+                ),
                 const SizedBox(width: 8),
                 Expanded(
                   child: Text(
                     result.url,
-                    style: const TextStyle(
-                        color: Colors.white70, fontSize: 13),
+                    style: const TextStyle(color: Colors.white70, fontSize: 13),
                     overflow: TextOverflow.ellipsis,
                   ),
                 ),
@@ -1017,11 +1066,11 @@ class _HomeScreenState extends State<HomeScreen>
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         const _SectionTitle(
-            icon: Icons.warning_amber_rounded,
-            title: 'Phishing Indicators'),
+          icon: Icons.warning_amber_rounded,
+          title: 'Phishing Indicators',
+        ),
         const SizedBox(height: 12),
-        ..._scanResult!.indicators
-            .map((i) => _IndicatorCard(indicator: i)),
+        ..._scanResult!.indicators.map((i) => _IndicatorCard(indicator: i)),
       ],
     );
   }
@@ -1032,16 +1081,16 @@ class _HomeScreenState extends State<HomeScreen>
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         const _SectionTitle(
-            icon: Icons.dns_outlined, title: 'Domain Information'),
+          icon: Icons.dns_outlined,
+          title: 'Domain Information',
+        ),
         const SizedBox(height: 12),
         Container(
-          padding:
-              const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+          padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
           decoration: BoxDecoration(
             color: const Color(0xFF111827),
             borderRadius: BorderRadius.circular(16),
-            border:
-                Border.all(color: Colors.white.withOpacity(0.08)),
+            border: Border.all(color: Colors.white.withOpacity(0.08)),
           ),
           child: Column(
             children: [
@@ -1054,13 +1103,12 @@ class _HomeScreenState extends State<HomeScreen>
                     : const Color(0xFFFF3B3B),
               ),
               _DomainInfoRow(
-                  label: 'Google Safe Browsing',
-                  value: _scanResult!.googleFlagged
-                      ? 'FLAGGED ✗'
-                      : 'Clean ✓',
-                  valueColor: _scanResult!.googleFlagged
-                      ? const Color(0xFFFF3B3B)
-                      : const Color(0xFF00FF88)),
+                label: 'Google Safe Browsing',
+                value: _scanResult!.googleFlagged ? 'FLAGGED ✗' : 'Clean ✓',
+                valueColor: _scanResult!.googleFlagged
+                    ? const Color(0xFFFF3B3B)
+                    : const Color(0xFF00FF88),
+              ),
               _DomainInfoRow(
                 label: 'VirusTotal Engines',
                 value: _scanResult!.vtTotal > 0
@@ -1070,12 +1118,12 @@ class _HomeScreenState extends State<HomeScreen>
                     ? const Color(0xFFFF3B3B)
                     : const Color(0xFF00FF88),
               ),
+              _DomainInfoRow(label: 'Registrar', value: info.registrar),
               _DomainInfoRow(
-                  label: 'Registrar', value: info.registrar),
-              _DomainInfoRow(
-                  label: 'Domain Age',
-                  value: info.domainAge,
-                  isLast: true),
+                label: 'Domain Age',
+                value: info.domainAge,
+                isLast: true,
+              ),
             ],
           ),
         ),
@@ -1089,20 +1137,20 @@ class _HomeScreenState extends State<HomeScreen>
       height: 52,
       child: OutlinedButton.icon(
         onPressed: _showReportDialog,
-        icon: const Icon(Icons.flag_outlined,
-            color: Color(0xFFFF3B3B)),
+        icon: const Icon(Icons.flag_outlined, color: Color(0xFFFF3B3B)),
         label: const Text(
           'Report as Phishing',
           style: TextStyle(
-              color: Color(0xFFFF3B3B),
-              fontWeight: FontWeight.w600,
-              fontSize: 15),
+            color: Color(0xFFFF3B3B),
+            fontWeight: FontWeight.w600,
+            fontSize: 15,
+          ),
         ),
         style: OutlinedButton.styleFrom(
-          side:
-              const BorderSide(color: Color(0xFFFF3B3B), width: 1.5),
+          side: const BorderSide(color: Color(0xFFFF3B3B), width: 1.5),
           shape: RoundedRectangleBorder(
-              borderRadius: BorderRadius.circular(12)),
+            borderRadius: BorderRadius.circular(12),
+          ),
         ),
       ),
     );
@@ -1114,15 +1162,17 @@ class _HomeScreenState extends State<HomeScreen>
       children: [
         Row(
           children: [
-            const _SectionTitle(
-                icon: Icons.history, title: 'Scan History'),
+            const _SectionTitle(icon: Icons.history, title: 'Scan History'),
             const Spacer(),
             TextButton(
               onPressed: () => setState(() => _history.clear()),
-              child: Text('Clear All',
-                  style: TextStyle(
-                      color: Colors.white.withOpacity(0.4),
-                      fontSize: 13)),
+              child: Text(
+                'Clear All',
+                style: TextStyle(
+                  color: Colors.white.withOpacity(0.4),
+                  fontSize: 13,
+                ),
+              ),
             ),
           ],
         ),
@@ -1133,18 +1183,24 @@ class _HomeScreenState extends State<HomeScreen>
               padding: const EdgeInsets.all(32),
               child: Column(
                 children: [
-                  Icon(Icons.history,
-                      color: Colors.white.withOpacity(0.2), size: 48),
+                  Icon(
+                    Icons.history,
+                    color: Colors.white.withOpacity(0.2),
+                    size: 48,
+                  ),
                   const SizedBox(height: 12),
-                  Text('No scans yet',
-                      style: TextStyle(
-                          color: Colors.white.withOpacity(0.4))),
+                  Text(
+                    'No scans yet',
+                    style: TextStyle(color: Colors.white.withOpacity(0.4)),
+                  ),
                 ],
               ),
             ),
           )
         else
-          ..._history.take(5).map(
+          ..._history
+              .take(5)
+              .map(
                 (item) => _HistoryCard(
                   item: item,
                   onTap: () {
@@ -1171,11 +1227,14 @@ class _SectionTitle extends StatelessWidget {
       children: [
         Icon(icon, color: const Color(0xFF00FF88), size: 18),
         const SizedBox(width: 8),
-        Text(title,
-            style: const TextStyle(
-                color: Colors.white,
-                fontSize: 16,
-                fontWeight: FontWeight.bold)),
+        Text(
+          title,
+          style: const TextStyle(
+            color: Colors.white,
+            fontSize: 16,
+            fontWeight: FontWeight.bold,
+          ),
+        ),
       ],
     );
   }
@@ -1186,11 +1245,12 @@ class _ActionButton extends StatelessWidget {
   final String label;
   final Color color;
   final VoidCallback onTap;
-  const _ActionButton(
-      {required this.icon,
-      required this.label,
-      required this.color,
-      required this.onTap});
+  const _ActionButton({
+    required this.icon,
+    required this.label,
+    required this.color,
+    required this.onTap,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -1208,11 +1268,14 @@ class _ActionButton extends StatelessWidget {
           children: [
             Icon(icon, color: color, size: 18),
             const SizedBox(width: 8),
-            Text(label,
-                style: TextStyle(
-                    color: color,
-                    fontSize: 13,
-                    fontWeight: FontWeight.w600)),
+            Text(
+              label,
+              style: TextStyle(
+                color: color,
+                fontSize: 13,
+                fontWeight: FontWeight.w600,
+              ),
+            ),
           ],
         ),
       ),
@@ -1224,10 +1287,11 @@ class _ApiBadge extends StatelessWidget {
   final String label;
   final bool isActive;
   final Color color;
-  const _ApiBadge(
-      {required this.label,
-      required this.isActive,
-      required this.color});
+  const _ApiBadge({
+    required this.label,
+    required this.isActive,
+    required this.color,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -1237,7 +1301,8 @@ class _ApiBadge extends StatelessWidget {
         color: isActive ? color.withOpacity(0.15) : Colors.white10,
         borderRadius: BorderRadius.circular(20),
         border: Border.all(
-            color: isActive ? color.withOpacity(0.4) : Colors.white12),
+          color: isActive ? color.withOpacity(0.4) : Colors.white12,
+        ),
       ),
       child: Row(
         mainAxisSize: MainAxisSize.min,
@@ -1251,11 +1316,14 @@ class _ApiBadge extends StatelessWidget {
             ),
           ),
           const SizedBox(width: 5),
-          Text(label,
-              style: TextStyle(
-                  color: isActive ? color : Colors.white30,
-                  fontSize: 11,
-                  fontWeight: FontWeight.w600)),
+          Text(
+            label,
+            style: TextStyle(
+              color: isActive ? color : Colors.white30,
+              fontSize: 11,
+              fontWeight: FontWeight.w600,
+            ),
+          ),
         ],
       ),
     );
@@ -1266,22 +1334,29 @@ class _VtStat extends StatelessWidget {
   final String label;
   final String value;
   final Color color;
-  const _VtStat(
-      {required this.label, required this.value, required this.color});
+  const _VtStat({
+    required this.label,
+    required this.value,
+    required this.color,
+  });
 
   @override
   Widget build(BuildContext context) {
     return Column(
       children: [
-        Text(value,
-            style: TextStyle(
-                color: color,
-                fontSize: 20,
-                fontWeight: FontWeight.bold)),
+        Text(
+          value,
+          style: TextStyle(
+            color: color,
+            fontSize: 20,
+            fontWeight: FontWeight.bold,
+          ),
+        ),
         const SizedBox(height: 2),
-        Text(label,
-            style: TextStyle(
-                color: Colors.white.withOpacity(0.5), fontSize: 11)),
+        Text(
+          label,
+          style: TextStyle(color: Colors.white.withOpacity(0.5), fontSize: 11),
+        ),
       ],
     );
   }
@@ -1319,26 +1394,31 @@ class _IndicatorCard extends StatelessWidget {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Text(indicator.title,
-                    style: const TextStyle(
-                        color: Colors.white,
-                        fontWeight: FontWeight.w600,
-                        fontSize: 14)),
+                Text(
+                  indicator.title,
+                  style: const TextStyle(
+                    color: Colors.white,
+                    fontWeight: FontWeight.w600,
+                    fontSize: 14,
+                  ),
+                ),
                 const SizedBox(height: 3),
-                Text(indicator.description,
-                    style: TextStyle(
-                        color: Colors.white.withOpacity(0.5),
-                        fontSize: 12)),
+                Text(
+                  indicator.description,
+                  style: TextStyle(
+                    color: Colors.white.withOpacity(0.5),
+                    fontSize: 12,
+                  ),
+                ),
               ],
             ),
           ),
           const SizedBox(width: 8),
           Icon(
-              indicator.isDangerous
-                  ? Icons.cancel
-                  : Icons.check_circle,
-              color: color,
-              size: 20),
+            indicator.isDangerous ? Icons.cancel : Icons.check_circle,
+            color: color,
+            size: 20,
+          ),
         ],
       ),
     );
@@ -1350,11 +1430,12 @@ class _DomainInfoRow extends StatelessWidget {
   final String value;
   final Color? valueColor;
   final bool isLast;
-  const _DomainInfoRow(
-      {required this.label,
-      required this.value,
-      this.valueColor,
-      this.isLast = false});
+  const _DomainInfoRow({
+    required this.label,
+    required this.value,
+    this.valueColor,
+    this.isLast = false,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -1364,21 +1445,26 @@ class _DomainInfoRow extends StatelessWidget {
           padding: const EdgeInsets.symmetric(vertical: 12),
           child: Row(
             children: [
-              Text(label,
-                  style: TextStyle(
-                      color: Colors.white.withOpacity(0.5),
-                      fontSize: 13)),
+              Text(
+                label,
+                style: TextStyle(
+                  color: Colors.white.withOpacity(0.5),
+                  fontSize: 13,
+                ),
+              ),
               const Spacer(),
-              Text(value,
-                  style: TextStyle(
-                      color: valueColor ?? Colors.white,
-                      fontSize: 13,
-                      fontWeight: FontWeight.w500)),
+              Text(
+                value,
+                style: TextStyle(
+                  color: valueColor ?? Colors.white,
+                  fontSize: 13,
+                  fontWeight: FontWeight.w500,
+                ),
+              ),
             ],
           ),
         ),
-        if (!isLast)
-          Divider(color: Colors.white.withOpacity(0.06), height: 1),
+        if (!isLast) Divider(color: Colors.white.withOpacity(0.06), height: 1),
       ],
     );
   }
@@ -1407,8 +1493,7 @@ class _HistoryCard extends StatelessWidget {
         decoration: BoxDecoration(
           color: const Color(0xFF111827),
           borderRadius: BorderRadius.circular(12),
-          border:
-              Border.all(color: Colors.white.withOpacity(0.06)),
+          border: Border.all(color: Colors.white.withOpacity(0.06)),
         ),
         child: Row(
           children: [
@@ -1420,11 +1505,14 @@ class _HistoryCard extends StatelessWidget {
                 borderRadius: BorderRadius.circular(10),
               ),
               child: Center(
-                child: Text('${item.riskScore}',
-                    style: TextStyle(
-                        color: item.riskColor,
-                        fontWeight: FontWeight.bold,
-                        fontSize: 13)),
+                child: Text(
+                  '${item.riskScore}',
+                  style: TextStyle(
+                    color: item.riskColor,
+                    fontWeight: FontWeight.bold,
+                    fontSize: 13,
+                  ),
+                ),
               ),
             ),
             const SizedBox(width: 12),
@@ -1432,20 +1520,27 @@ class _HistoryCard extends StatelessWidget {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Text(item.url,
-                      style: const TextStyle(
-                          color: Colors.white, fontSize: 13),
-                      overflow: TextOverflow.ellipsis),
+                  Text(
+                    item.url,
+                    style: const TextStyle(color: Colors.white, fontSize: 13),
+                    overflow: TextOverflow.ellipsis,
+                  ),
                   const SizedBox(height: 3),
-                  Text(_getTimeAgo(item.scannedAt),
-                      style: TextStyle(
-                          color: Colors.white.withOpacity(0.4),
-                          fontSize: 11)),
+                  Text(
+                    _getTimeAgo(item.scannedAt),
+                    style: TextStyle(
+                      color: Colors.white.withOpacity(0.4),
+                      fontSize: 11,
+                    ),
+                  ),
                 ],
               ),
             ),
-            Icon(Icons.chevron_right,
-                color: Colors.white.withOpacity(0.3), size: 18),
+            Icon(
+              Icons.chevron_right,
+              color: Colors.white.withOpacity(0.3),
+              size: 18,
+            ),
           ],
         ),
       ),
